@@ -1,0 +1,116 @@
+.checkoutPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.checkoutContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.checkoutForm {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.checkoutForm h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.checkoutForm input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.formRow {
+  display: flex;
+  gap: 10px;
+}
+
+.formRow input {
+  flex: 1;
+}
+
+.checkoutForm h3 {
+  font-size: 20px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.checkoutForm label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.orderSummary {
+  flex: 1;
+  min-width: 300px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.orderSummary h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.summaryTotals {
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.summaryTotals h3 {
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.placeOrderButton {
+  width: 100%;
+  padding: 15px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.placeOrderButton:hover {
+  background: #333;
+}
+
+@media (max-width: 768px) {
+  .checkoutContainer {
+    flex-direction: column;
+  }
+  
+  .checkoutForm {
+    order: 2;
+  }
+  
+  .orderSummary {
+    order: 1;
+  }
+}

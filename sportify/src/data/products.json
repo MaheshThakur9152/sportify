@@ -1,0 +1,232 @@
+[
+  {
+    "id": "nike-air-max-270",
+    "brand": "Nike",
+    "name": "Nike Air Max 270",
+    "category": "Men's Shoes",
+    "type": "shoes",
+    "price": 14995,
+    "currency": "INR",
+    "description": "The Nike Air Max 270 delivers visible Air cushioning under every step. With its sleek design and incredible comfort, it's built for all-day wear.",
+    "images": [
+      "/nike-imgaes/imgi_16_AIR+JORDAN+40+PF.png",
+      "/nike-imgaes/imgi_17_ZM+GP+CHALLENGE+PRO+HC+PRM+USO.png",
+      "/nike-imgaes/imgi_18_W+ZOOM+VAPOR+PRO+3+HC+PRM.png",
+      "/nike-imgaes/imgi_19_AS+W+NKCT+DF+SLAM+DRESS+USO+2.png"
+    ],
+    "colors": [
+      { "name": "White/Black", "hex": "#FFFFFF" }
+    ],
+    "sizes": ["UK 6", "UK 7", "UK 8", "UK 9", "UK 10", "UK 11", "UK 12"],
+    "availableSizes": ["UK 7", "UK 8", "UK 9", "UK 10"],
+    "sku": "AH8050-100",
+    "origin": "Vietnam"
+  },
+  {
+    "id": "nike-pegasus-premium",
+    "brand": "Nike",
+    "name": "Nike Pegasus Premium",
+    "category": "Women's Shoes",
+    "type": "shoes",
+    "price": 12995,
+    "currency": "INR",
+    "description": "Engineered for performance, the Nike Pegasus Premium combines responsive cushioning with a lightweight design for runners who demand the best.",
+    "images": [
+      "/nike-imgaes/imgi_10_W+NIKE+PEGASUS+PREMIUM.png",
+      "/nike-imgaes/imgi_56_W+NIKE+PEGASUS+PREMIUM.png",
+      "/nike-imgaes/imgi_57_W+NIKE+PEGASUS+PREMIUM.png",
+      "/nike-imgaes/imgi_60_W+NIKE+STRUCTURE+26.png"
+    ],
+    "colors": [
+      { "name": "Pink", "hex": "#FFC0CB" }
+    ],
+    "sizes": ["UK 4", "UK 5", "UK 6", "UK 7", "UK 8", "UK 9"],
+    "availableSizes": ["UK 5", "UK 6", "UK 7", "UK 8"],
+    "sku": "BV7256-600",
+    "origin": "Vietnam"
+  },
+  {
+    "id": "nike-tee-calling-skate",
+    "brand": "Nike",
+    "name": "Nike Tee Calling Skate QS",
+    "category": "Unisex T-Shirt",
+    "type": "clothing",
+    "price": 3995,
+    "currency": "INR",
+    "description": "Express your skate style with the Nike Tee Calling Skate QS. Made from soft, breathable cotton, it's perfect for all-day comfort.",
+    "images": [
+      "/nike-imgaes/imgi_11_U+NK+TEE+CALLING+SKATE+QS.png",
+      "/nike-imgaes/imgi_58_U+NK+TEE+CALLING+SKATE+QS.png",
+      "/nike-imgaes/imgi_59_U+NK+TEE+CALLING+SKATE+QS.png",
+      "/nike-imgaes/imgi_61_W+NIKE+STRUCTURE+26.png"
+    ],
+    "colors": [
+      { "name": "Black", "hex": "#000000" }
+    ],
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "availableSizes": ["S", "M", "L", "XL"],
+    "sku": "DM3976-010",
+    "origin": "Vietnam"
+  },
+  {
+    "id": "nike-zoom-vapor-12",
+    "brand": "Nike",
+    "name": "Nike Zoom Vapor 12",
+    "category": "Men's Tennis Shoes",
+    "type": "shoes",
+    "price": 16995,
+    "currency": "INR",
+    "description": "Dominate the court with the Nike Zoom Vapor 12. Featuring advanced Zoom Air technology for explosive speed and agility.",
+    "images": [
+      "/nike-imgaes/imgi_2_W+ZOOM+VAPOR+12+HC.png",
+      "/nike-imgaes/imgi_3_W+ZOOM+GP+CHALLENGE+PRO+HC.png",
+      "/nike-imgaes/imgi_42_W+ZOOM+VAPOR+12+HC.png",
+      "/nike-imgaes/imgi_43_W+ZOOM+VAPOR+12+HC.png"
+    ],
+    "colors": [
+      { "name": "White", "hex": "#FFFFFF" }
+    ],
+    "sizes": ["UK 7", "UK 8", "UK 9", "UK 10", "UK 11", "UK 12"],
+    "availableSizes": ["UK 8", "UK 9", "UK 10", "UK 11"],
+    "sku": "CI2962-100",
+    "origin": "Vietnam"
+  },
+  {
+    "id": "nike-court-lite-4",
+    "brand": "Nike",
+    "name": "Nike Court Lite 4",
+    "category": "Men's Heritage Shoes",
+    "type": "shoes",
+    "price": 7995,
+    "currency": "INR",
+    "description": "Classic style meets modern comfort in the Nike Court Lite 4. Perfect for everyday wear with heritage-inspired design.",
+    "images": [
+      "/nike-imgaes/imgi_7_M+NK+COURT+LITE+4+HC+HERITAGE.png",
+      "/nike-imgaes/imgi_50_M+NK+COURT+LITE+4+HC+HERITAGE.png",
+      "/nike-imgaes/imgi_51_M+NK+COURT+LITE+4+HC+HERITAGE.png",
+      "/nike-imgaes/imgi_44_W+ZOOM+GP+CHALLENGE+PRO+HC.png"
+    ],
+    "colors": [
+      { "name": "White", "hex": "#FFFFFF" }
+    ],
+    "sizes": ["UK 6", "UK 7", "UK 8", "UK 9", "UK 10"],
+    "availableSizes": ["UK 7", "UK 8", "UK 9"],
+    "sku": "BQ5448-100",
+    "origin": "Vietnam"
+  },
+  {
+    "id": "nike-tee-calling-tennis",
+    "brand": "Nike",
+    "name": "Nike Tee Calling Tennis QS",
+    "category": "Unisex T-Shirt",
+    "type": "clothing",
+    "price": 3995,
+    "currency": "INR",
+    "description": "Ace your style with the Nike Tee Calling Tennis QS. Lightweight and breathable for optimal performance on and off the court.",
+    "images": [
+      "/nike-imgaes/imgi_8_U+NKCT+TEE+CALLING+TENNIS+QS.png",
+      "/nike-imgaes/imgi_52_U+NKCT+TEE+CALLING+TENNIS+QS.png",
+      "/nike-imgaes/imgi_53_U+NKCT+TEE+CALLING+TENNIS+QS.png",
+      "/nike-imgaes/imgi_45_W+ZOOM+GP+CHALLENGE+PRO+HC.png"
+    ],
+    "colors": [
+      { "name": "White", "hex": "#FFFFFF" }
+    ],
+    "sizes": ["S", "M", "L", "XL"],
+    "availableSizes": ["M", "L", "XL"],
+    "sku": "DM3977-100",
+    "origin": "Vietnam"
+  },
+  {
+    "id": "nike-air-zoom-alphafly",
+    "brand": "Nike",
+    "name": "Nike Air Zoom Alphafly NEXT%",
+    "category": "Men's Racing Shoes",
+    "type": "shoes",
+    "price": 29995,
+    "currency": "INR",
+    "description": "Break records with the Nike Air Zoom Alphafly NEXT%. Engineered for elite runners seeking maximum energy return and propulsion.",
+    "images": [
+      "/nike-imgaes/imgi_9_AIR+ZOOM+ALPHAFLY+NEXT-+3.png",
+      "/nike-imgaes/imgi_54_AIR+ZOOM+ALPHAFLY+NEXT-+3.png",
+      "/nike-imgaes/imgi_55_AIR+ZOOM+ALPHAFLY+NEXT-+3.png",
+      "/nike-imgaes/imgi_46_M+ZOOM+VAPOR+12+HC.png"
+    ],
+    "colors": [
+      { "name": "Volt", "hex": "#00FF00" }
+    ],
+    "sizes": ["UK 7", "UK 8", "UK 9", "UK 10", "UK 11"],
+    "availableSizes": ["UK 8", "UK 9", "UK 10"],
+    "sku": "DJ5438-001",
+    "origin": "USA"
+  },
+  {
+    "id": "nike-structure-26",
+    "brand": "Nike",
+    "name": "Nike Structure 26",
+    "category": "Women's Running Shoes",
+    "type": "shoes",
+    "price": 11995,
+    "currency": "INR",
+    "description": "Experience stability and comfort with the Nike Structure 26. Designed for neutral runners who want reliable support mile after mile.",
+    "images": [
+      "/nike-imgaes/imgi_12_W+NIKE+STRUCTURE+26.png",
+      "/nike-imgaes/imgi_47_M+ZOOM+VAPOR+12+HC.png",
+      "/nike-imgaes/imgi_48_M+ZOOM+VAPOR+12+HC.png",
+      "/nike-imgaes/imgi_49_M+ZOOM+VAPOR+12+HC.png"
+    ],
+    "colors": [
+      { "name": "Grey", "hex": "#808080" }
+    ],
+    "sizes": ["UK 4", "UK 5", "UK 6", "UK 7", "UK 8"],
+    "availableSizes": ["UK 5", "UK 6", "UK 7"],
+    "sku": "BV7255-002",
+    "origin": "Vietnam"
+  },
+  {
+    "id": "nike-tee-calling-basketball",
+    "brand": "Nike",
+    "name": "Nike Tee Calling Basketball QS",
+    "category": "Unisex T-Shirt",
+    "type": "clothing",
+    "price": 3995,
+    "currency": "INR",
+    "description": "Bring your A-game with the Nike Tee Calling Basketball QS. Made for players who live for the court and the culture around it.",
+    "images": [
+      "/nike-imgaes/imgi_13_U+NK+TEE+CALLING+BASKETBALL+QS.png",
+      "/nike-imgaes/imgi_62_U+NK+TEE+CALLING+BASKETBALL+QS.png",
+      "/nike-imgaes/imgi_63_U+NK+TEE+CALLING+BASKETBALL+QS.png",
+      "/nike-imgaes/imgi_4_M+ZOOM+VAPOR+12+HC.png"
+    ],
+    "colors": [
+      { "name": "Black", "hex": "#000000" }
+    ],
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "availableSizes": ["S", "M", "L"],
+    "sku": "DM3978-010",
+    "origin": "Vietnam"
+  },
+  {
+    "id": "nike-tee-calling-jdi",
+    "brand": "Nike",
+    "name": "Nike Tee Calling JDI QS",
+    "category": "Unisex T-Shirt",
+    "type": "clothing",
+    "price": 3995,
+    "currency": "INR",
+    "description": "Just Do It with the Nike Tee Calling JDI QS. A timeless piece that embodies the spirit of Nike for everyday wear.",
+    "images": [
+      "/nike-imgaes/imgi_14_U+NSW+TEE+CALLING+JDI+QS.png",
+      "/nike-imgaes/imgi_64_U+NSW+TEE+CALLING+JDI+QS.png",
+      "/nike-imgaes/imgi_65_U+NSW+TEE+CALLING+JDI+QS.png",
+      "/nike-imgaes/imgi_5_M+ZOOM+VAPOR+12+HC.png"
+    ],
+    "colors": [
+      { "name": "White", "hex": "#FFFFFF" }
+    ],
+    "sizes": ["S", "M", "L", "XL"],
+    "availableSizes": ["M", "L", "XL"],
+    "sku": "DM3979-100",
+    "origin": "Vietnam"
+  }
+]

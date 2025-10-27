@@ -34,7 +34,7 @@ export default function HeroSection() {
   return (
     <section className={styles.hero} onClick={handleHeroClick}>
       <video
-        src="/lebrone-james.mp4"
+        src="/Lebrone-jamesvideoupdated.mp4"
         autoPlay
         muted
         playsInline

@@ -1,0 +1,75 @@
+.sidebar {
+  padding: 24px 16px;
+}
+
+.categories h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #000;
+}
+
+.categories ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.categories li {
+  margin-bottom: 8px;
+}
+
+.categories button {
+  background: none;
+  border: none;
+  padding: 8px 0;
+  font-size: 16px;
+  color: #757575;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.categories button.active {
+  color: #000;
+  font-weight: bold;
+}
+
+.filters {
+  margin-top: 32px;
+}
+
+.filterSection {
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 16px;
+}
+
+.filterHeader {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+  padding: 12px 0;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+
+.filterOptions {
+  padding: 12px 0;
+}
+
+.filterOptions label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #757575;
+  cursor: pointer;
+}
+
+.filterOptions input {
+  margin-right: 8px;
+}

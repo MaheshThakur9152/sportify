@@ -9,6 +9,7 @@ export default function Home() {
       <Navbar />
       <main>
         <HeroSection />
+        <p className="championsText">For Champions</p>
         <FeaturedSplitSection />
       </main>
       <Footer />
