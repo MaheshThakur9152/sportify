@@ -21,7 +21,7 @@ export default function Navbar() {
     // Update cart count
     const updateCart = () => {
       const cart = JSON.parse(localStorage.getItem('sportifyCart') || '[]');
-      const total = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      const total = cart.reduce((sum: number, item: any) => sum + (item.quantity || 1), 0);
       setCartCount(total);
     };
 
