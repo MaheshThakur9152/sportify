@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import EquipmentCard from './EquipmentCard';
-import ProductModal from './ProductModal';
+import ProductModal from '@/components/ProductModal';
 import styles from './EquipmentGrid.module.css';
 
 interface Product {
