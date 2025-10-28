@@ -1,43 +1,14 @@
-package com.sportify.entity;
+package com.sportify.model;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "order_items")
-public class OrderItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
-    
+public class CartRequest {
     private String productId;
     private String productName;
     private String productImage;
     private Double price;
     private Integer quantity;
     private String size;
-    private String color;
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
     public String getProductId() {
         return productId;
     }
@@ -84,13 +55,5 @@ public class OrderItem {
 
     public void setSize(String size) {
         this.size = size;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 }

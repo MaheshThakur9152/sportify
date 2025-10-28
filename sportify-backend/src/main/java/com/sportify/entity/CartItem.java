@@ -1,25 +1,32 @@
 package com.sportify.entity;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "order_items")
-public class OrderItem {
+@Table(name = "cart_items")
+@EntityListeners(AuditingEntityListener.class)
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
-    
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String productId;
     private String productName;
     private String productImage;
     private Double price;
     private Integer quantity;
     private String size;
-    private String color;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     // Getters and Setters
     public Long getId() {
@@ -30,12 +37,12 @@ public class OrderItem {
         this.id = id;
     }
 
-    public Order getOrder() {
-        return order;
+    public User getUser() {
+        return user;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getProductId() {
@@ -86,11 +93,11 @@ public class OrderItem {
         this.size = size;
     }
 
-    public String getColor() {
-        return color;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

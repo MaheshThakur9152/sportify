@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class OrderService {
@@ -32,9 +31,14 @@ public class OrderService {
 
         Order order = new Order();
         order.setUser(user);
-        order.setOrderNumber(UUID.randomUUID().toString());
+        order.setOrderNumber("SP" + System.currentTimeMillis());
         order.setTotalAmount(request.getTotalAmount());
-        order.setShippingAddress(request.getShippingAddress());
+        order.setShippingName(request.getShippingAddress().getFullName());
+        order.setShippingAddress(request.getShippingAddress().getAddressLine1() + (request.getShippingAddress().getAddressLine2() != null ? ", " + request.getShippingAddress().getAddressLine2() : ""));
+        order.setShippingCity(request.getShippingAddress().getCity());
+        order.setShippingState(request.getShippingAddress().getState());
+        order.setShippingPin(request.getShippingAddress().getPinCode());
+        order.setShippingPhone(request.getShippingAddress().getPhone());
         order.setCreatedAt(LocalDateTime.now());
 
         for (OrderItem item : request.getItems()) {
@@ -50,6 +54,6 @@ public class OrderService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return orderRepository.findByUser(user);
+        return orderRepository.findByUserOrderByCreatedAtDesc(user);
     }
 }
