@@ -2,9 +2,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import productsData from '../../data/products.json';
+import { Product } from '../../types/product';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import styles from './Cart.module.css';
+
+const products: Product[] = productsData as Product[];
 
 interface CartItem {
   cartItemId: string;
@@ -31,28 +35,100 @@ export default function CartPage() {
     return () => window.removeEventListener('cartUpdated', loadCart);
   }, []);
 
-  const loadCart = () => {
-    const cart = JSON.parse(localStorage.getItem('sportifyCart') || '[]');
-    setCartItems(cart);
+  const loadCart = async () => {
+    const token = localStorage.getItem('sportifyToken');
+    if (!token) {
+      setCartItems([]);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8080/api/cart', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Map to include product details
+        const cartWithDetails = data.map((item: any) => {
+          const product = products.find(p => p.id === item.productId);
+          return {
+            cartItemId: item.id,
+            id: item.productId,
+            name: product?.name || 'Unknown Product',
+            price: product?.price || 0,
+            image: product?.images[0] || '',
+            size: item.size,
+            color: item.color,
+            quantity: item.quantity,
+            category: product?.category || '',
+            sku: product?.sku || '',
+            allImages: product?.images || [],
+          };
+        });
+        setCartItems(cartWithDetails);
+      } else {
+        setCartItems([]);
+      }
+    } catch (error) {
+      console.error('Error loading cart:', error);
+      setCartItems([]);
+    }
     setLoading(false);
   };
 
-  const updateQuantity = (cartItemId: string, newQuantity: number) => {
-    const updated = cartItems.map(item =>
-      item.cartItemId === cartItemId
-        ? { ...item, quantity: Math.max(1, newQuantity) }
-        : item
-    );
-    setCartItems(updated);
-    localStorage.setItem('sportifyCart', JSON.stringify(updated));
-    window.dispatchEvent(new Event('cartUpdated'));
+  const updateQuantity = async (cartItemId: string, newQuantity: number) => {
+    const token = localStorage.getItem('sportifyToken');
+    if (!token) return;
+
+    try {
+      const response = await fetch('http://localhost:8080/api/cart/update', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: cartItemId,
+          quantity: Math.max(1, newQuantity),
+        }),
+      });
+
+      if (response.ok) {
+        loadCart(); // Reload cart
+        window.dispatchEvent(new Event('cartUpdated'));
+      }
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+    }
   };
 
-  const removeItem = (cartItemId: string) => {
-    const updated = cartItems.filter(item => item.cartItemId !== cartItemId);
-    setCartItems(updated);
-    localStorage.setItem('sportifyCart', JSON.stringify(updated));
-    window.dispatchEvent(new Event('cartUpdated'));
+  const removeItem = async (cartItemId: string) => {
+    const token = localStorage.getItem('sportifyToken');
+    if (!token) return;
+
+    try {
+      const response = await fetch('http://localhost:8080/api/cart/remove', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: cartItemId,
+        }),
+      });
+
+      if (response.ok) {
+        loadCart(); // Reload cart
+        window.dispatchEvent(new Event('cartUpdated'));
+      }
+    } catch (error) {
+      console.error('Error removing item:', error);
+    }
   };
 
   const calculateTotals = () => {

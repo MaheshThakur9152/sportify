@@ -14,35 +14,79 @@ export default function Navbar() {
 
   useEffect(() => {
     // Check login status
+    const token = localStorage.getItem('sportifyToken');
     const user = JSON.parse(localStorage.getItem('sportifyUser') || 'null');
-    setIsLoggedIn(!!user);
+    setIsLoggedIn(!!token);
     if (user) setUserName(user.name || 'Account');
 
     // Update cart count
-    const updateCart = () => {
-      const cart = JSON.parse(localStorage.getItem('sportifyCart') || '[]');
-      const total = cart.reduce((sum: number, item: any) => sum + (item.quantity || 1), 0);
-      setCartCount(total);
+    const updateCart = async () => {
+      const token = localStorage.getItem('sportifyToken');
+      if (token) {
+        try {
+          const response = await fetch('http://localhost:8080/api/cart', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+          if (response.ok) {
+            const data = await response.json();
+            const total = data.reduce((sum: number, item: any) => sum + item.quantity, 0);
+            setCartCount(total);
+          } else {
+            setCartCount(0);
+          }
+        } catch (error) {
+          setCartCount(0);
+        }
+      } else {
+        setCartCount(0);
+      }
     };
 
     updateCart();
     window.addEventListener('cartUpdated', updateCart);
-    return () => window.removeEventListener('cartUpdated', updateCart);
+    window.addEventListener('authUpdated', updateCart);
+    window.addEventListener('authUpdated', () => {
+      const newToken = localStorage.getItem('sportifyToken');
+      const newUser = JSON.parse(localStorage.getItem('sportifyUser') || 'null');
+      setIsLoggedIn(!!newToken);
+      if (newUser) setUserName(newUser.name || 'Account');
+    });
+    return () => {
+      window.removeEventListener('cartUpdated', updateCart);
+      window.removeEventListener('authUpdated', () => {});
+    };
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('sportifyToken');
+      if (token) {
+        await fetch('http://localhost:8080/api/auth/logout', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    localStorage.removeItem('sportifyToken');
     localStorage.removeItem('sportifyUser');
     setIsLoggedIn(false);
     setShowAccountDropdown(false);
+    window.dispatchEvent(new Event('authUpdated'));
     router.push('/');
   };
 
   const navLinks = [
-    { label: 'NEW & FEATURED', href: '/new-featured' },
-    { label: 'SHOP', href: '/shop' },
+    // { label: 'NEW & FEATURED', href: '/new-featured' },
+    // { label: 'SHOP', href: '/shop' },
     { label: 'PRODUCTS', href: '/products' },
-    { label: 'CATEGORIES', href: '/categories' },
-    { label: 'SALE', href: '/sale' },
+    // { label: 'CATEGORIES', href: '/categories' },
+    // { label: 'SALE', href: '/sale' },
     { label: 'ABOUT', href: '/about' },
     { label: 'CONTACT', href: '/contact' },
   ];

@@ -1,4 +1,5 @@
 import styles from './FeaturedSplitSection.module.css';
+import Link from 'next/link';
 
 export default function FeaturedSplitSection() {
   return (
@@ -9,7 +10,7 @@ export default function FeaturedSplitSection() {
           <div className={styles.overlay}>
             <h2 className={styles.title}>Athlete Picks</h2>
             <p className={styles.description}>Give your hoop dreams the royal treatment.</p>
-            <button className={styles.button}>Shop</button>
+            <Link href="/store" className={styles.button}>Shop</Link>
           </div>
         </div>
         <div className={styles.splitItem}>
@@ -17,7 +18,8 @@ export default function FeaturedSplitSection() {
           <div className={styles.overlay}>
             <h2 className={styles.title}>FEATURED</h2>
             <p className={styles.description}>Discover the latest in sports performance.</p>
-            <button className={styles.button}>Shop</button>
+            {/* <button className={styles.button}>Shop</button> */}
+            <Link href="/store" className={styles.button}>Shop</Link>
           </div>
         </div>
       </div>

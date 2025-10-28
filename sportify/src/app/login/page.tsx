@@ -11,20 +11,74 @@ export default function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    name: ''
+    name: '',
+    phone: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate authentication
-    localStorage.setItem('sportifyUser', JSON.stringify({ email: formData.email, name: formData.name || 'User' }));
-    window.dispatchEvent(new Event('authUpdated'));
-    router.push('/');
+    setLoading(true);
+    setError('');
+
+    try {
+      if (isLogin) {
+        // Login
+        const response = await fetch('http://localhost:8080/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: formData.email,
+            password: formData.password,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Invalid credentials');
+        }
+
+        const data = await response.json();
+        localStorage.setItem('sportifyToken', data.token);
+        localStorage.setItem('sportifyUser', JSON.stringify({ email: formData.email, name: data.username || 'User' }));
+        window.dispatchEvent(new Event('authUpdated'));
+        router.push('/');
+      } else {
+        // Signup
+        const response = await fetch('http://localhost:8080/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+            name: formData.name,
+            phone: formData.phone,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Signup failed');
+        }
+
+        const data = await response.json();
+        alert(data.message);
+        setIsLogin(true); // Switch to login after signup
+      }
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,16 +87,26 @@ export default function Login() {
       <div className={styles.loginContainer}>
         <div className={styles.loginBox}>
           <h2>{isLogin ? 'Sign In' : 'Sign Up'}</h2>
+          {error && <div className={styles.error}>{error}</div>}
           <form onSubmit={handleSubmit}>
             {!isLogin && (
-              <input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
+              <>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone (optional)"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                />
+              </>
             )}
             <input
               type="email"
@@ -60,7 +124,9 @@ export default function Login() {
               onChange={handleInputChange}
               required
             />
-            <button type="submit">{isLogin ? 'Sign In' : 'Sign Up'}</button>
+            <button type="submit" disabled={loading}>
+              {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Sign Up')}
+            </button>
           </form>
           <p>
             {isLogin ? "Don't have an account?" : "Already have an account?"}

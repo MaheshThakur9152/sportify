@@ -50,59 +50,56 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
     );
   }
 
-  const handleAddToBag = () => {
+  const handleAddToBag = async () => {
     if (!selectedSize) {
       alert('Please select a size');
       return;
     }
 
-    setIsAdding(true);
-
-    // Get existing cart from localStorage
-    const existingCart = JSON.parse(localStorage.getItem('sportifyCart') || '[]');
-
-    // Create unique ID for this product+size combination
-    const cartItemId = `${product.id}_${selectedSize}`;
-
-    // Check if this exact item already exists in cart
-    const existingItemIndex = existingCart.findIndex((item: any) => item.cartItemId === cartItemId);
-
-    if (existingItemIndex > -1) {
-      // Item exists, increase quantity
-      existingCart[existingItemIndex].quantity += quantity;
-    } else {
-      // New item, add to cart
-      const cartItem = {
-        cartItemId,
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.images[0],
-        size: selectedSize,
-        color: product.colors[selectedColor].name,
-        quantity: quantity,
-        category: product.category,
-        sku: product.sku,
-        allImages: product.images,
-      };
-      existingCart.push(cartItem);
+    const token = localStorage.getItem('sportifyToken');
+    if (!token) {
+      alert('Please login to add items to cart');
+      router.push('/login');
+      return;
     }
 
-    // Save to localStorage
-    localStorage.setItem('sportifyCart', JSON.stringify(existingCart));
+    setIsAdding(true);
 
-    // Trigger event to update navbar
-    window.dispatchEvent(new Event('cartUpdated'));
+    try {
+      const response = await fetch('http://localhost:8080/api/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          productId: product.id,
+          size: selectedSize,
+          color: product.colors[selectedColor].name,
+          quantity: quantity,
+        }),
+      });
 
-    // Show success message
-    alert(`${product.name} added to cart!`);
+      if (response.ok) {
+        // Trigger event to update navbar
+        window.dispatchEvent(new Event('cartUpdated'));
+
+        // Show success message
+        alert(`${product.name} added to cart!`);
+
+        // Redirect to cart
+        setTimeout(() => {
+          router.push('/cart');
+        }, 500);
+      } else {
+        alert('Failed to add to cart');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Error adding to cart');
+    }
 
     setIsAdding(false);
-
-    // Redirect to cart
-    setTimeout(() => {
-      router.push('/cart');
-    }, 500);
   };
 
   const handleFavourite = () => {

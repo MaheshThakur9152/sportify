@@ -2,17 +2,26 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import productsData from '../../data/products.json';
+import { Product } from '../../types/product';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import styles from './Checkout.module.css';
 
+const products: Product[] = productsData as Product[];
+
 interface CartItem {
+  cartItemId: string;
   id: string;
   name: string;
   image: string;
   size: string;
+  color: string;
   price: number;
   quantity: number;
+  category: string;
+  sku: string;
+  allImages: string[];
 }
 
 export default function Checkout() {
@@ -31,22 +40,91 @@ export default function Checkout() {
   const router = useRouter();
 
   useEffect(() => {
-    const storedCart = localStorage.getItem('sportifyCart');
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
-    }
-  }, []);
+    const loadCart = async () => {
+      const token = localStorage.getItem('sportifyToken');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:8080/api/cart', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Map to include product details
+          const cartWithDetails = data.map((item: any) => {
+            const product = products.find(p => p.id === item.productId);
+            return {
+              cartItemId: item.id,
+              id: item.productId,
+              name: product?.name || 'Unknown Product',
+              price: product?.price || 0,
+              image: product?.images[0] || '',
+              size: item.size,
+              color: item.color,
+              quantity: item.quantity,
+              category: product?.category || '',
+              sku: product?.sku || '',
+              allImages: product?.images || [],
+            };
+          });
+          setCart(cartWithDetails);
+        } else {
+          setCart([]);
+        }
+      } catch (error) {
+        console.error('Error loading cart:', error);
+        setCart([]);
+      }
+    };
+
+    loadCart();
+  }, [router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle order placement
-    alert('Order placed successfully!');
-    localStorage.removeItem('sportifyCart');
-    router.push('/');
+
+    const token = localStorage.getItem('sportifyToken');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8080/api/orders/create', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        alert('Order placed successfully!');
+        // Clear cart
+        await fetch('http://localhost:8080/api/cart/clear', {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        window.dispatchEvent(new Event('cartUpdated'));
+        router.push('/');
+      } else {
+        alert('Failed to place order');
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Error placing order');
+    }
   };
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
