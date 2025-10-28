@@ -1,0 +1,66 @@
+.loginPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.loginContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.loginBox {
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.loginBox h2 {
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.loginBox form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.loginBox input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.loginBox button {
+  padding: 12px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.loginBox button:hover {
+  background: #333;
+}
+
+.toggleButton {
+  background: none;
+  color: #007bff;
+  text-decoration: underline;
+  margin-left: 5px;
+}
+
+.toggleButton:hover {
+  color: #0056b3;
+}
