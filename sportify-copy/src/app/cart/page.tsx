@@ -45,7 +45,7 @@ export default function CartPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/cart', {
+      const response = await fetch('http://210.79.128.175:5000/cart', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -54,7 +54,7 @@ export default function CartPage() {
       if (response.ok) {
         const data = await response.json();
         // Fetch products to get details
-        const productsResponse = await fetch('http://localhost:5000/products');
+        const productsResponse = await fetch('http://210.79.128.175:5000/products');
         const products = await productsResponse.json();
         
         // Map to include product details
@@ -91,7 +91,7 @@ export default function CartPage() {
     if (!token) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/cart/${cartItemId}`, {
+      const response = await fetch(`http://210.79.128.175:5000/cart/${cartItemId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ export default function CartPage() {
     if (!token) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/cart/${cartItemId}`, {
+      const response = await fetch(`http://210.79.128.175:5000/cart/${cartItemId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

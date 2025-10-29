@@ -49,7 +49,7 @@ export default function Orders() {
       return;
     }
 
-    fetch('http://localhost:5000/orders', {
+    fetch('http://210.79.128.175:5000/orders', {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -90,7 +90,7 @@ export default function Orders() {
       if (!orderItems[orderId]) {
         try {
           const token = localStorage.getItem('sportifyToken');
-          const response = await fetch(`http://localhost:5000/orders/${orderId}/items`, {
+          const response = await fetch(`http://210.79.128.175:5000/orders/${orderId}/items`, {
             headers: {
               'Authorization': `Bearer ${token}`,
             },

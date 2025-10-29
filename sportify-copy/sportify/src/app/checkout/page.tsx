@@ -48,7 +48,7 @@ export default function Checkout() {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/cart', {
+        const response = await fetch('http://210.79.128.175:5000/cart', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -100,7 +100,7 @@ export default function Checkout() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/checkout', {
+      const response = await fetch('http://210.79.128.175:5000/checkout', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -110,7 +110,7 @@ export default function Checkout() {
       if (response.ok) {
         alert('Order placed successfully!');
         // Clear cart
-        await fetch('http://localhost:5000/cart', {
+        await fetch('http://210.79.128.175:5000/cart', {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,

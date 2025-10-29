@@ -30,7 +30,7 @@ export default function Login() {
     try {
       if (isLogin) {
         // Login
-        const response = await fetch('http://localhost:5000/login', {
+        const response = await fetch('http://210.79.128.175:5000/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export default function Login() {
         router.push('/');
       } else {
         // Signup
-        const response = await fetch('http://localhost:5000/register', {
+        const response = await fetch('http://210.79.128.175:5000/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
