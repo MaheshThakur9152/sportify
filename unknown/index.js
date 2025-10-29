@@ -5,8 +5,10 @@ const sqlite3 = require('sqlite3').verbose();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const path = require('path');
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 app.use(cors());
@@ -121,8 +123,57 @@ app.post('/register', async (req, res) => {
     const mailOptions = {
       from: process.env.SMTP_USER,
       to: email,
-      subject: 'Verify your email',
-      html: `<p>Click the button to verify your email:</p><a href="${verificationUrl}" style="background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;">Verify Email</a>`,
+      subject: 'Verify Your Email - Sportify',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px;">
+          <div style="background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;">
+            <div style="margin-bottom: 30px;">
+              <h1 style="color: #000; margin: 0; font-size: 28px;">SPORTIFY</h1>
+              <p style="color: #666; margin: 5px 0;">Email Verification</p>
+            </div>
+            
+            <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <h2 style="color: #0066cc; margin: 0 0 15px 0;">Welcome to Sportify!</h2>
+              <p style="color: #333; margin: 0 0 15px 0; line-height: 1.6;">
+                Thank you for registering with Sportify. To complete your account setup and start shopping, please verify your email address.
+              </p>
+            </div>
+
+            <div style="margin: 30px 0;">
+              <a href="${verificationUrl}" 
+                 style="background-color: #007bff; 
+                        color: #fff; 
+                        text-decoration: none; 
+                        padding: 15px 30px; 
+                        border-radius: 25px; 
+                        font-size: 16px; 
+                        font-weight: bold; 
+                        display: inline-block; 
+                        box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+                        transition: all 0.3s ease;">
+                Verify My Email
+              </a>
+            </div>
+
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+              <p style="color: #666; margin: 0; font-size: 14px;">
+                <strong>Didn't create an account?</strong> You can safely ignore this email.
+              </p>
+            </div>
+
+            <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+              <p style="color: #856404; margin: 0; font-size: 14px;">
+                <strong>Link expires in 1 hour</strong> for security reasons.
+              </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+              <p style="color: #666; margin: 0;">Questions? Contact our support team</p>
+              <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Just Do It.</p>
+            </div>
+          </div>
+        </div>
+      `,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -286,12 +337,113 @@ app.post('/checkout', verifyToken, async (req, res) => {
       });
     });
 
+    // Get order items for email
+    const emailOrderItems = await new Promise((resolve, reject) => {
+      const query = `
+        SELECT oi.*, p.name, p.brand
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.id
+        WHERE oi.order_id = ?
+      `;
+      db.all(query, [orderId], (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      });
+    });
+
+    const itemsHtml = emailOrderItems.map(item => 
+      `<tr>
+        <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.brand} ${item.name}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">₹${item.price.toLocaleString('en-IN')}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">₹${(item.quantity * item.price).toLocaleString('en-IN')}</td>
+      </tr>`
+    ).join('');
+
     const mailOptions = {
       from: process.env.SMTP_USER,
       to: user.email,
-      subject: 'Checkout Successful',
-      html: `<p>Your order has been placed successfully. Total: ₹${total}</p>
-             <p>Shipping to: ${name}, ${address1}, ${city}, ${state} ${pin}</p>`,
+      subject: `Order Confirmation #${orderId} - Sportify`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px;">
+          <div style="background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <div style="text-align: center; margin-bottom: 30px;">
+              <h1 style="color: #000; margin: 0; font-size: 28px;">SPORTIFY</h1>
+              <p style="color: #666; margin: 5px 0;">Order Confirmation</p>
+            </div>
+            
+            <div style="background-color: #f0f0f0; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <h2 style="margin: 0 0 10px 0; color: #333;">Order #${orderId}</h2>
+              <p style="margin: 0; color: #666;">Placed on ${new Date().toLocaleDateString('en-IN', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              })}</p>
+            </div>
+
+            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 10px;">Order Items</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+              <thead>
+                <tr style="background-color: #f5f5f5;">
+                  <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Product</th>
+                  <th style="padding: 12px; text-align: center; border-bottom: 2px solid #ddd;">Qty</th>
+                  <th style="padding: 12px; text-align: right; border-bottom: 2px solid #ddd;">Price</th>
+                  <th style="padding: 12px; text-align: right; border-bottom: 2px solid #ddd;">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemsHtml}
+                <tr style="background-color: #f9f9f9; font-weight: bold;">
+                  <td colspan="3" style="padding: 15px; text-align: right; border-top: 2px solid #ddd;">Order Total:</td>
+                  <td style="padding: 15px; text-align: right; border-top: 2px solid #ddd; font-size: 18px; color: #007bff;">₹${total.toLocaleString('en-IN')}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+              <div style="flex: 1;">
+                <h3 style="color: #333; margin-bottom: 10px;">Shipping Address</h3>
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
+                  <p style="margin: 0 0 5px 0;"><strong>${name}</strong></p>
+                  <p style="margin: 0 0 5px 0;">${address1}</p>
+                  ${address2 ? `<p style="margin: 0 0 5px 0;">${address2}</p>` : ''}
+                  <p style="margin: 0 0 5px 0;">${city}, ${state} ${pin}</p>
+                  <p style="margin: 0 0 5px 0;">Phone: ${phone}</p>
+                  <p style="margin: 0;">Email: ${email}</p>
+                </div>
+              </div>
+              
+              <div style="flex: 1;">
+                <h3 style="color: #333; margin-bottom: 10px;">Payment Method</h3>
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
+                  <p style="margin: 0; text-transform: uppercase;"><strong>${payment_method}</strong></p>
+                </div>
+                
+                <h3 style="color: #333; margin: 20px 0 10px 0;">Order Status</h3>
+                <div style="background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; border: 1px solid #ffeaa7;">
+                  <strong>Processing</strong> - Your order is being prepared for shipment.
+                </div>
+              </div>
+            </div>
+
+            <div style="background-color: #e8f5e8; border: 1px solid #c3e6c3; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+              <h3 style="color: #2d5a2d; margin: 0 0 10px 0;">What's Next?</h3>
+              <ul style="color: #2d5a2d; margin: 0; padding-left: 20px;">
+                <li>You'll receive a shipping confirmation email with tracking details</li>
+                <li>Estimated delivery: 3-5 business days</li>
+                <li>Questions? Contact our support team</li>
+              </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+              <p style="color: #666; margin: 0;">Thank you for shopping with Sportify!</p>
+              <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Just Do It.</p>
+            </div>
+          </div>
+        </div>
+      `,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -320,6 +472,36 @@ app.get('/orders', verifyToken, (req, res) => {
   db.all('SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC', [req.userId], (err, orders) => {
     if (err) return res.status(500).json({ message: 'Error fetching orders' });
     res.json(orders);
+  });
+});
+
+app.get('/orders/:id/items', verifyToken, (req, res) => {
+  const orderId = req.params.id;
+  
+  // First check if the order belongs to the user
+  db.get('SELECT id FROM orders WHERE id = ? AND user_id = ?', [orderId, req.userId], (err, order) => {
+    if (err) return res.status(500).json({ message: 'Error fetching order' });
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // Get order items with product details
+    const query = `
+      SELECT oi.*, p.name, p.brand, p.images
+      FROM order_items oi
+      JOIN products p ON oi.product_id = p.id
+      WHERE oi.order_id = ?
+    `;
+    
+    db.all(query, [orderId], (err, items) => {
+      if (err) return res.status(500).json({ message: 'Error fetching order items' });
+      
+      // Parse the images JSON for each item
+      const processedItems = items.map(item => ({
+        ...item,
+        images: JSON.parse(item.images)
+      }));
+      
+      res.json(processedItems);
+    });
   });
 });
 

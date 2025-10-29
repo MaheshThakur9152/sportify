@@ -32,9 +32,10 @@ export default function Checkout() {
     city: '',
     state: '',
     pin: '',
-    phone: '',
-    payment: 'card'
+    phone: ''
   });
+  const [paymentMethod, setPaymentMethod] = useState('cod');
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -94,30 +95,39 @@ export default function Checkout() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const token = localStorage.getItem('sportifyToken');
-    if (!token) {
-      router.push('/login');
+  const handlePlaceOrder = async () => {
+    if (!validateForm()) {
+      alert('Please fill in all required fields.');
       return;
     }
 
+    setPaymentProcessing(true);
+
     try {
+      const token = localStorage.getItem('sportifyToken');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      // Create order
       const response = await fetch('http://localhost:5000/checkout', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          payment_method: paymentMethod
+        }),
       });
 
       if (response.ok) {
         alert('Order placed successfully!');
         // Cart is already cleared by backend
         window.dispatchEvent(new Event('cartUpdated'));
-        router.push('/');
+        router.push('/orders');
       } else {
         const errorData = await response.json();
         alert(`Failed to place order: ${errorData.message || 'Unknown error'}`);
@@ -125,7 +135,14 @@ export default function Checkout() {
     } catch (error) {
       console.error('Error placing order:', error);
       alert('Error placing order. Please check your connection.');
+    } finally {
+      setPaymentProcessing(false);
     }
+  };
+
+  const validateForm = () => {
+    const requiredFields = ['email', 'name', 'address1', 'city', 'state', 'pin', 'phone'];
+    return requiredFields.every(field => formData[field as keyof typeof formData].trim() !== '');
   };
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -148,7 +165,7 @@ export default function Checkout() {
     <div className={styles.checkoutPage}>
       <Navbar />
       <div className={styles.checkoutContainer}>
-        <form className={styles.checkoutForm} onSubmit={handleSubmit}>
+        <div className={styles.checkoutForm}>
           <h2>Shipping Information</h2>
           <input
             type="email"
@@ -217,36 +234,57 @@ export default function Checkout() {
           />
           
           <h3>Payment Method</h3>
-          <label>
-            <input
-              type="radio"
-              name="payment"
-              value="card"
-              checked={formData.payment === 'card'}
-              onChange={handleInputChange}
-            />
-            Credit/Debit Card
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="payment"
-              value="upi"
-              checked={formData.payment === 'upi'}
-              onChange={handleInputChange}
-            />
-            UPI
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="payment"
-              value="cod"
-              checked={formData.payment === 'cod'}
-              onChange={handleInputChange}
-            />
-            Cash on Delivery
-          </label>
+          <div className={styles.paymentSection}>
+            <div className={styles.paymentOptions}>
+              <label className={styles.paymentOption}>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="cod"
+                  checked={paymentMethod === 'cod'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <span>Cash on Delivery</span>
+              </label>
+              <label className={styles.paymentOption}>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="card"
+                  checked={paymentMethod === 'card'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <span>Credit/Debit Card</span>
+              </label>
+              <label className={styles.paymentOption}>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="upi"
+                  checked={paymentMethod === 'upi'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <span>UPI</span>
+              </label>
+              <label className={styles.paymentOption}>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="netbanking"
+                  checked={paymentMethod === 'netbanking'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <span>Net Banking</span>
+              </label>
+            </div>
+            <button
+              onClick={handlePlaceOrder}
+              disabled={paymentProcessing}
+              className={styles.placeOrderButton}
+            >
+              {paymentProcessing ? 'Processing...' : `Place Order - ₹${total.toLocaleString('en-IN')}`}
+            </button>
+          </div>
           
           <div className={styles.orderSummary}>
             <h2>Order Summary</h2>
@@ -261,11 +299,8 @@ export default function Checkout() {
               <p>Shipping: ₹ {shipping.toLocaleString('en-IN')}</p>
               <h3>Total: ₹ {total.toLocaleString('en-IN')}</h3>
             </div>
-            <button type="submit" className={styles.placeOrderButton}>
-              Place Order
-            </button>
           </div>
-        </form>
+        </div>
       </div>
       <Footer />
     </div>

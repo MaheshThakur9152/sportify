@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Sidebar.module.css';
 
 interface SidebarProps {
@@ -29,6 +29,18 @@ export default function Sidebar({ onFilterChange }: SidebarProps) {
     color: '',
     priceRange: '',
   });
+
+  useEffect(() => {
+    // Initialize filters on mount
+    onFilterChange({
+      category: 'ALL',
+      gender: '',
+      kids: '',
+      size: '',
+      color: '',
+      priceRange: '',
+    });
+  }, [onFilterChange]);
 
   const toggleSection = (section: keyof typeof expandedSections) => {
     setExpandedSections(prev => ({

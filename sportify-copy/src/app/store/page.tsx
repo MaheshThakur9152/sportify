@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Product } from '../../types/product';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -29,6 +29,15 @@ export default function Store() {
       .then(data => {
         setProducts(data);
         setLoading(false);
+        // Ensure filters are set to show all products
+        setFilters({
+          category: 'ALL',
+          gender: '',
+          kids: '',
+          size: '',
+          color: '',
+          priceRange: '',
+        });
       })
       .catch(err => {
         console.error('Error fetching products:', err);
@@ -47,7 +56,11 @@ export default function Store() {
       // Category
       if (filters.category !== 'ALL') {
         if (filters.category === 'SHOES' && product.type !== 'shoes') return false;
-        // Add more category mappings as needed
+        if (filters.category === 'FOOTBALL' && !product.category.toLowerCase().includes('football')) return false;
+        if (filters.category === 'RACKETS' && !product.category.toLowerCase().includes('racket')) return false;
+        if (filters.category === 'BAGS' && !product.category.toLowerCase().includes('bag')) return false;
+        if (filters.category === 'BADMINTON' && !product.category.toLowerCase().includes('badminton')) return false;
+        if (filters.category === 'EQUIPMENT' && !product.category.toLowerCase().includes('equipment')) return false;
       }
 
       // Gender
@@ -91,9 +104,9 @@ export default function Store() {
     return filtered;
   }, [filters, searchQuery, sortBy]);
 
-  const handleFilterChange = (newFilters: typeof filters) => {
+  const handleFilterChange = useCallback((newFilters: typeof filters) => {
     setFilters(newFilters);
-  };
+  }, []);
 
   return (
     <div className={styles.store}>
