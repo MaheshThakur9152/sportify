@@ -24,7 +24,7 @@ export default function Store() {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5000/products')
+    fetch('https://cp.cosinv.com/products')
       .then(res => res.json())
       .then(data => {
         setProducts(data);

@@ -48,12 +48,12 @@ export default function Checkout() {
 
       try {
         // Fetch products
-        const productsResponse = await fetch('http://210.79.128.175:5000/products');
+        const productsResponse = await fetch('https://cp.cosinv.com/products');
         const productsData = await productsResponse.json();
         setProducts(productsData);
 
         // Fetch cart
-        const cartResponse = await fetch('http://210.79.128.175:5000/cart', {
+        const cartResponse = await fetch('https://cp.cosinv.com/cart', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -111,7 +111,7 @@ export default function Checkout() {
       }
 
       // Create order
-      const response = await fetch('http://210.79.128.175:5000/checkout', {
+      const response = await fetch('https://cp.cosinv.com/checkout', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

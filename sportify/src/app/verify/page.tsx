@@ -19,7 +19,7 @@ export default function Verify() {
       return;
     }
 
-    fetch(`http://210.79.128.175:5000/verify?token=${token}`)
+    fetch(`https://cp.cosinv.com/verify?token=${token}`)
       .then(res => res.json())
       .then(data => {
         if (data.message) {

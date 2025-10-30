@@ -24,7 +24,7 @@ export default function Navbar() {
       const token = localStorage.getItem('sportifyToken');
       if (token) {
         try {
-          const response = await fetch('http://210.79.128.175:5000/cart', {
+          const response = await fetch('https://cp.cosinv.com/cart', {
             headers: {
               'Authorization': `Bearer ${token}`,
             },

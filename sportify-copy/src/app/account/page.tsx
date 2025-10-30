@@ -19,7 +19,7 @@ export default function Account() {
       return;
     }
 
-    fetch('http://210.79.128.175:5000/account', {
+    fetch('https://cp.cosinv.com/account', {
       headers: {
         'Authorization': `Bearer ${token}`,
       },

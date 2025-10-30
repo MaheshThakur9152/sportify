@@ -21,7 +21,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
   useEffect(() => {
     const loadProduct = async () => {
       try {
-        const response = await fetch('http://210.79.128.175:5000/products');
+        const response = await fetch('https://cp.cosinv.com/products');
         const products: Product[] = await response.json();
         const foundProduct = products.find(p => p.id === id);
         if (foundProduct) {
@@ -72,7 +72,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
     setIsAdding(true);
 
     try {
-      const response = await fetch('http://210.79.128.175:5000/cart', {
+      const response = await fetch('https://cp.cosinv.com/cart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
